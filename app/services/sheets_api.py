@@ -49,7 +49,7 @@ async def spreadsheets_create(
     response = await wrapper_service.as_service_account(
         service.spreadsheets.create(json=SPREADSHEET)
     )
-    spreadsheet_id = response['spreadsheetId']  # noqa
+    spreadsheet_id = response['spreadsheetId']
     return spreadsheet_id
 
 
@@ -93,7 +93,7 @@ async def get_spreadsheets_from_disk(
         service.files.list(
             q=f'mimeType="application/vnd.google-apps.spreadsheet"'
               f'and name="{spreadsheet_title}"')
-    return spreadsheets['files']  # noqa
+    return spreadsheets['files']
 
 
 async def delete_spreadsheets_from_disk(
