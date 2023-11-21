@@ -91,9 +91,9 @@ async def get_spreadsheets_from_disk(
         'drive', settings.google_drive_api_version)
     spreadsheets = await wrapper_service.as_service_account(
         service.files.list(
-            q=f'mimeType="application/vnd.google-apps.spreadsheet" and name="{
-    spreadsheet_title
-    }"')
+            q=f'mimeType="application/vnd.google-apps.spreadsheet"'
+              f'and name="{spreadsheet_title}"'
+        )
     return spreadsheets['files']  # noqa
 
 
