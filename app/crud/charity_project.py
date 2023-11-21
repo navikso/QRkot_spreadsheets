@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Tuple
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -78,7 +78,7 @@ class CRUDCharityproject(CRUDBase):
     async def get_projects_by_completion_rate(
             self,
             session: AsyncSession
-    ) -> list[tuple[str]]:
+    ) -> List[Tuple[str]]:
         query = select([
             self.model.name,
             (func.julianday(self.model.close_date) -

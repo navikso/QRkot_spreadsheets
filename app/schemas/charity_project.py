@@ -29,3 +29,4 @@ class CharityProjectUpdate(BaseModel):
     name: str = Field(None, min_length=1, max_length=100)
     description: str = Field(None, min_length=1)
     full_amount: Optional[int]
+    invested_amount: Optional[int]

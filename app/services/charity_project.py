@@ -31,14 +31,19 @@ async def get_validated_before_update(
 ):
     charityproject = await get_existing_charityproject(charityproject_id, session)
 
-    if obj_in.full_amount and obj_in.full_amount < charityproject.invested_amount:
+    # if obj_in.full_amount and obj_in.full_amount < charityproject.invested_amount:
+    #     raise HTTPException(
+    #         status_code=400, detail="Сумма сбора не может быть меньше внесенной!"
+    #     )
+
+    if obj_in.invested_amount and obj_in.invested_amount < charityproject.full_amount:
         raise HTTPException(
-            status_code=400, detail="Сумма сбора не может уменьшаться!"
+            status_code=422, detail="Сумма сбора не может быть меньше внесенной!"
         )
 
-    if obj_in.full_amount == MIN_AMOUNT:
+    if obj_in.invested_amount == MIN_AMOUNT:
         raise HTTPException(
-            status_code=400, detail="Сумма сбора не может быть ноль!"
+            status_code=422, detail="Сумма сбора не может быть ноль!"
         )
 
     if charityproject.fully_invested:

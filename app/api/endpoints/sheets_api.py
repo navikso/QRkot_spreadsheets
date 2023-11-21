@@ -1,10 +1,12 @@
+from typing import Dict, List
+
 from aiogoogle import Aiogoogle
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.db import get_async_session
-from app.core.sheets_api import get_service
+from app.core.google_client import get_service
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
 from app.services.sheets_api import (get_spreadsheets_from_disk,
@@ -25,7 +27,7 @@ SHEETS_URL = 'https://docs.google.com/spreadsheets/d/'
 async def get_project_progress_report(
     session: AsyncSession = Depends(get_async_session),
     wrapper_service: Aiogoogle = Depends(get_service)
-) -> dict[str, str]:
+) -> Dict[str, str]:
     projects = await charity_project_crud.get_projects_by_completion_rate(
         session)
     spreadsheet_id = await spreadsheets_create(wrapper_service)
@@ -38,7 +40,7 @@ async def get_project_progress_report(
             dependencies=[Depends(current_superuser)])
 async def get_all_reports(
     wrapper_service: Aiogoogle = Depends(get_service)
-) -> list[dict[str, str]]:
+) -> List[Dict[str, str]]:
     return await get_spreadsheets_from_disk(settings.report_title,
                                             wrapper_service)
 
@@ -47,6 +49,6 @@ async def get_all_reports(
                dependencies=[Depends(current_superuser)])
 async def clear_all_reports(
     wrapper_service: Aiogoogle = Depends(get_service)
-) -> dict[str, str]:
+) -> Dict[str, str]:
     await delete_spreadsheets_from_disk(wrapper_service)
     return {'message': 'Информация о проектах удалена.'}

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import List, Dict
 
 from aiogoogle import Aiogoogle
 
@@ -85,7 +86,7 @@ async def spreadsheets_update_value(
 async def get_spreadsheets_from_disk(
         spreadsheet_title: str,
         wrapper_service: Aiogoogle
-) -> list[dict[str, str]]:
+) -> List[Dict[str, str]]:
     service = await wrapper_service.discover(
         'drive', settings.google_drive_api_version)
     spreadsheets = await wrapper_service.as_service_account(
