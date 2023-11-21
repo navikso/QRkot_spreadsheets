@@ -84,7 +84,7 @@ class CRUDCharityproject(CRUDBase):
             (func.julianday(self.model.close_date) -
              func.julianday(self.model.create_date)).label('fаster'),
             self.model.description
-        ]).where(self.model.fully_invested == True).order_by('fаster')
+        ]).where(self.model.fully_invested is True).order_by('fаster')
         charityprojects = await session.execute(query)
         return charityprojects.all()
 
