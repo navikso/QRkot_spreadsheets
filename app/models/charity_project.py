@@ -2,14 +2,15 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
 
+from app.constants import MIN_AMOUNT, MAX_NAME_LENGTH
 from app.core.db import Base
 
 
 class CharityProject(Base):
-    name = Column(String(100), nullable=False)
+    name = Column(String(MAX_NAME_LENGTH), nullable=False)
     description = Column(Text, nullable=False)
-    full_amount = Column(Integer, default=0)
-    invested_amount = Column(Integer, default=0)
+    full_amount = Column(Integer, default=MIN_AMOUNT)
+    invested_amount = Column(Integer, default=MIN_AMOUNT)
     fully_invested = Column(Boolean, default=False)
     create_date = Column(DateTime, index=True, default=datetime.utcnow)
     close_date = Column(DateTime)

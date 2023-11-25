@@ -9,7 +9,7 @@ from app.crud.donation import donation_crud
 from app.crud.tools import read_all_donations_from_db
 from app.models.user import User
 from app.schemas.donation import DonationCreate, DonationDB
-
+from app.services.donation_service import DonationService
 
 router = APIRouter()
 
@@ -25,10 +25,14 @@ async def create_new_donation(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    return await donation_crud.create_donation(donation, session, user)
+    return await DonationService().create_donation(donation, session, user)
 
 
-@router.get("/", response_model=List[DonationDB], response_model_exclude_none=True)
+@router.get(
+    "/",
+    response_model=List[DonationDB],
+    response_model_exclude_none=True
+)
 async def get_all_donations(
     session: AsyncSession = Depends(get_async_session),
 ):

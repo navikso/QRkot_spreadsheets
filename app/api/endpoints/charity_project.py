@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
@@ -10,6 +11,7 @@ from app.crud.tools import read_all_charityproject_from_db
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
+from app.services.charity_project_service import CharityProjectService
 
 
 router = APIRouter()
@@ -25,7 +27,8 @@ async def create_new_charityproject(
     charityproject: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await charity_project_crud.create_charityproject(charityproject, session)
+    return await CharityProjectService().create_charityproject(
+        charityproject, session)
 
 
 @router.get(
@@ -47,10 +50,10 @@ async def partially_update_charityproject(
     obj_in: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    from app.services.charity_project import get_existing_charityproject
-
-    charityproject = await get_existing_charityproject(charityproject_id, session)
-    return await charity_project_crud.update_charityproject(charityproject, obj_in, session)
+    charityproject = await charity_project_crud.get_charityproject_by_id(
+        charityproject_id, session)
+    return await CharityProjectService().update_charityproject(
+        charityproject, obj_in, session)
 
 
 @router.delete(
@@ -62,4 +65,5 @@ async def remove_charityproject(
     charityproject_id: int,
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await charity_project_crud.remove_charityproject(charityproject_id, session)
+    return await CharityProjectService().remove_charityproject(
+        charityproject_id, session)
