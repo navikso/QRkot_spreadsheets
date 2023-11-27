@@ -78,8 +78,7 @@ class CharityProjectService:
         charityproject = await self.__get_existing_charityproject(charityproject_id)
 
         if (
-            obj_in.invested_amount
-            and obj_in.invested_amount < charityproject.full_amount
+            obj_in.invested_amount and obj_in.invested_amount < charityproject.full_amount
         ):
             raise HTTPException(
                 status_code=422, detail="Сумма сбора не может быть меньше внесенной!"

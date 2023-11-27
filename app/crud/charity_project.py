@@ -16,8 +16,8 @@ class CRUDCharityproject(CRUDBase):
                 [
                     self.model.name,
                     (
-                        func.julianday(self.model.close_date)
-                        - func.julianday(self.model.create_date)
+                        func.julianday(self.model.close_date
+                                       ) - func.julianday(self.model.create_date)
                     ).label("fаster"),
                     self.model.description,
                 ]
