@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
 
-from app.constants import MIN_AMOUNT, MAX_NAME_LENGTH
+from app.constants import MAX_NAME_LENGTH, MIN_AMOUNT
 from app.core.db import Base
 
 

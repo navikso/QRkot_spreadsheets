@@ -4,6 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from app.constants import MAX_NAME_LENGTH, MIN_DESCR_LENGTH, MIN_NAME_LENGTH
+
 from .base import ProjectBase
 
 

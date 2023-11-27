@@ -1,18 +1,18 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
 from app.core.user import current_superuser
-from app.crud.charity_project import charity_project_crud
-from app.crud.tools import read_all_charityproject_from_db
-from app.schemas.charity_project import (CharityProjectCreate,
-                                         CharityProjectDB,
-                                         CharityProjectUpdate)
+from app.crud.base import CRUDBase
+from app.models import CharityProject
+from app.schemas.charity_project import (
+    CharityProjectCreate,
+    CharityProjectDB,
+    CharityProjectUpdate,
+)
 from app.services.charity_project_service import CharityProjectService
-
 
 router = APIRouter()
 
@@ -27,8 +27,7 @@ async def create_new_charityproject(
     charityproject: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await CharityProjectService().create_charityproject(
-        charityproject, session)
+    return await CharityProjectService(session).create_charityproject(charityproject)
 
 
 @router.get(
@@ -37,7 +36,7 @@ async def create_new_charityproject(
 async def get_all_charityproject(
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await read_all_charityproject_from_db(session)
+    return await CRUDBase(CharityProject).get_multi(session)
 
 
 @router.patch(
@@ -50,10 +49,10 @@ async def partially_update_charityproject(
     obj_in: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    charityproject = await charity_project_crud.get_charityproject_by_id(
-        charityproject_id, session)
-    return await CharityProjectService().update_charityproject(
-        charityproject, obj_in, session)
+    charityproject = await CRUDBase(CharityProject).get(charityproject_id, session)
+    return await CharityProjectService(session).update_charityproject(
+        charityproject, obj_in
+    )
 
 
 @router.delete(
@@ -65,5 +64,4 @@ async def remove_charityproject(
     charityproject_id: int,
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await CharityProjectService().remove_charityproject(
-        charityproject_id, session)
+    return await CharityProjectService(session).remove_charityproject(charityproject_id)

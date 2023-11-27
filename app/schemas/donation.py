@@ -3,7 +3,8 @@ from typing import Optional
 
 from pydantic import Field
 
-from app.constants import MIN_COMMENT_LENGTH, MIN_AMOUNT
+from app.constants import MIN_AMOUNT, MIN_COMMENT_LENGTH
+
 from .base import ProjectBase
 
 

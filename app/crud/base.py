@@ -21,6 +21,16 @@ class CRUDBase:
         )
         return db_obj.scalars().first()
 
+    async def get_by_attribute(
+        self,
+        attr_name: str,
+        attr_value: str,
+        session: AsyncSession,
+    ):
+        attr = getattr(self.model, attr_name)
+        db_obj = await session.execute(select(self.model).where(attr == attr_value))
+        return db_obj.scalars().first()
+
     async def get_multi(self, session: AsyncSession):
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
@@ -31,7 +41,6 @@ class CRUDBase:
         session: AsyncSession,
         user: Optional[User] = None,
     ):
-
         if user is not None:
             obj_in["user_id"] = user.id
         db_obj = self.model(**obj_in)

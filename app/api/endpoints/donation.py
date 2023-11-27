@@ -5,8 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
 from app.core.user import current_user
+from app.crud.base import CRUDBase
 from app.crud.donation import donation_crud
-from app.crud.tools import read_all_donations_from_db
+from app.models import Donation
 from app.models.user import User
 from app.schemas.donation import DonationCreate, DonationDB
 from app.services.donation_service import DonationService
@@ -28,16 +29,11 @@ async def create_new_donation(
     return await DonationService().create_donation(donation, session, user)
 
 
-@router.get(
-    "/",
-    response_model=List[DonationDB],
-    response_model_exclude_none=True
-)
+@router.get("/", response_model=List[DonationDB], response_model_exclude_none=True)
 async def get_all_donations(
     session: AsyncSession = Depends(get_async_session),
 ):
-    all_donations = await read_all_donations_from_db(session)
-    return all_donations
+    return await CRUDBase(Donation).get_multi(session)
 
 
 @router.get(
